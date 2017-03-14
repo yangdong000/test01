@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Home</title>
+    <script th:src="@{/js/jquery-3.1.1.min.js}"  type="text/javascript"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            $('#btnCreate').bind('click',function () {
+
+
+                var _title = $('#title').val();
+                var _content = $('#content').val();
+
+                var _data = {};
+                _data.title = _title;
+                _data.content = _content;
+
+                $.ajax({
+                    type: 'post',
+                    url: '/',
+                    contentType: "application/json",
+                    data : JSON.stringify(_data),
+                    success: function (data) {
+                        alert(data);
+                        //$(location).prop('href', '/student');
+                    },
+                    error: function(data,status,er) {
+                        alert("error: "+data+" status: "+status+" er:"+er);
+                    }
+                });
+
+            });
+
+
+            $('#btnUpdate').bind('click',function () {
+
+                var _id = 10000;
+                var _title = $('#title').val();
+                var _content = $('#content').val();
+
+                var _data = {};
+                _data.title = _title;
+                _data.content = _content;
+                _data.id = _id;
+
+                $.ajax({
+                    type: 'put',
+                    url: '/' + _id,
+                    contentType: "application/json",
+                    data : JSON.stringify(_data),
+                    success: function (data) {
+                        alert(data);
+                        //$(location).prop('href', '/student');
+                    },
+                    error: function(data,status,er) {
+                        alert("error: "+data+" status: "+status+" er:"+er);
+                    }
+                });
+
+            });
+
+
+            $('#btnDelete').bind('click',function () {
+
+                var _id = 10000;
+
+                var _data = {};
+
+                _data.id = _id;
+
+                $.ajax({
+                    type: 'delete',
+                    url: '/' + _id,
+                    contentType: "application/json",
+                    data : JSON.stringify(_data),
+                    success: function (data) {
+                        alert(data);
+                        //$(location).prop('href', '/student');
+                    },
+                    error: function(data,status,er) {
+                        alert("error: "+data+" status: "+status+" er:"+er);
+                    }
+                });
+
+            });
+
+
+
+        });
+    </script>
+
+
+
+</head>
+<body>
+
+    <h3>Home</h3>
+
+
+    <!--/*
+        get  http://localhost:8080    /
+        post http://localhost:8080  /
+
+        ----------------------------
+        get http://localhost:8080/book     /book
+        post http://localhost:8080/book  /book
+
+    */-->
+
+    <form th:action="@{/}" method="post" th:object="${book}">
+        <table>
+            <tr>
+                <th>Title：</th>
+                <td>
+                    <!--/*
+                        *{title}  ${book.title}
+                        th:field   name="title" id="title"
+                     */-->
+                    <input type="text"  th:field="*{title}"/>
+                </td>
+                <td th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title error message</td>
+            </tr>
+            <tr>
+                <th>Content：</th>
+                <td>
+                    <input type="text" th:field="*{content}"/>
+                </td>
+                <td th:if="${#fields.hasErrors('content')}" th:errors="*{content}">Content error message</td>
+            </tr>
+            <tr>
+                <td>
+                   <button>Create a book</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <hr/>
+
+    <button id="btnCreate">RestFull Ajax Create a book</button>
+
+    <button id="btnUpdate">RestFull Ajax Update a book</button>
+
+    <button id="btnDelete">RestFull Ajax Delete a book</button>
+
+</body>
+</html>
